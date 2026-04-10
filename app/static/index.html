@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Predictive Maintenance UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-1: #0b1f2a;
+        --bg-2: #173647;
+        --card: #f7f3ea;
+        --ink: #1d2f36;
+        --accent: #dd5a2d;
+        --accent-2: #2aa198;
+        --danger: #b3352c;
+        --ok: #2e7d32;
+        --warn: #b06d00;
+        --line: #d8d3c8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", sans-serif;
+        background:
+          radial-gradient(
+            1200px 500px at 20% -10%,
+            #336f84 0%,
+            transparent 70%
+          ),
+          radial-gradient(900px 400px at 90% 20%, #4e8a9f 0%, transparent 70%),
+          linear-gradient(135deg, var(--bg-1), var(--bg-2));
+        color: var(--ink);
+        padding: 24px;
+      }
+
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        background: color-mix(in oklab, var(--card) 92%, white 8%);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+        overflow: hidden;
+        animation: rise 500ms ease-out both;
+      }
+
+      @keyframes rise {
+        from {
+          transform: translateY(16px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .hero {
+        background:
+          repeating-linear-gradient(
+            -45deg,
+            rgba(221, 90, 45, 0.12),
+            rgba(221, 90, 45, 0.12) 12px,
+            transparent 12px,
+            transparent 24px
+          ),
+          linear-gradient(90deg, #f3e2bf, #f2ccb5);
+        padding: 28px;
+        border-bottom: 2px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.45rem, 4vw, 2rem);
+        letter-spacing: 0.4px;
+      }
+
+      .subtitle {
+        margin: 8px 0 0;
+        color: #35525c;
+        font-size: 0.98rem;
+      }
+
+      .content {
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.84rem;
+      }
+
+      .pill {
+        background: #efe9dc;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 10px;
+      }
+
+      form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+      }
+
+      .field {
+        display: grid;
+        gap: 5px;
+        animation: appear 300ms ease both;
+      }
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #35525c;
+      }
+
+      input[type="number"] {
+        width: 100%;
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        outline: none;
+        font: inherit;
+        background: #fff;
+        transition:
+          border-color 150ms ease,
+          box-shadow 150ms ease;
+      }
+
+      input[type="number"]:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(221, 90, 45, 0.18);
+      }
+
+      .actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+
+      button {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font:
+          600 0.95rem "Space Grotesk",
+          sans-serif;
+        cursor: pointer;
+        transition:
+          transform 140ms ease,
+          opacity 140ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+      }
+      button:active {
+        transform: translateY(0);
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .secondary {
+        background: #e7f2ef;
+        color: #11463f;
+        border: 1px solid #b4dad3;
+      }
+
+      .result {
+        border: 2px dashed #c7c1b3;
+        border-radius: 16px;
+        padding: 14px;
+        background: #fbf8f2;
+        min-height: 70px;
+        display: grid;
+        align-content: center;
+        gap: 4px;
+      }
+
+      .result strong {
+        font-size: 1.1rem;
+      }
+
+      .critical {
+        color: var(--danger);
+      }
+      .warning {
+        color: var(--warn);
+      }
+      .healthy {
+        color: var(--ok);
+      }
+
+      .muted {
+        color: #5c6f75;
+        font-size: 0.92rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="hero">
+        <h1>Predictive Maintenance Console</h1>
+        <p class="subtitle">Simple frontend for the /predict endpoint</p>
+      </section>
+
+      <section class="content">
+        <div class="meta">
+          <span class="pill">Method: POST</span>
+          <span class="pill">Route: /predict</span>
+          <span class="pill">Payload: 24 numeric fields</span>
+        </div>
+
+        <form id="predict-form"></form>
+
+        <div id="result" class="result">
+          <span class="muted">Enter values and click "Predict status".</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const fields = [
+        "op_setting_1",
+        "op_setting_2",
+        "op_setting_3",
+        "sensor_1",
+        "sensor_2",
+        "sensor_3",
+        "sensor_4",
+        "sensor_5",
+        "sensor_6",
+        "sensor_7",
+        "sensor_8",
+        "sensor_9",
+        "sensor_10",
+        "sensor_11",
+        "sensor_12",
+        "sensor_13",
+        "sensor_14",
+        "sensor_15",
+        "sensor_16",
+        "sensor_17",
+        "sensor_18",
+        "sensor_19",
+        "sensor_20",
+        "sensor_21",
+      ];
+
+      const form = document.getElementById("predict-form");
+      const result = document.getElementById("result");
+
+      for (let i = 0; i < fields.length; i++) {
+        const name = fields[i];
+        const wrapper = document.createElement("div");
+        wrapper.className = "field";
+        wrapper.style.animationDelay = `${Math.min(i * 12, 180)}ms`;
+
+        const label = document.createElement("label");
+        label.htmlFor = name;
+        label.textContent = name;
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.step = "any";
+        input.id = name;
+        input.name = name;
+        input.value = "0";
+        input.required = true;
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+        form.appendChild(wrapper);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const predictButton = document.createElement("button");
+      predictButton.className = "primary";
+      predictButton.type = "submit";
+      predictButton.textContent = "Predict status";
+
+      const fillExampleButton = document.createElement("button");
+      fillExampleButton.className = "secondary";
+      fillExampleButton.type = "button";
+      fillExampleButton.textContent = "Fill sample values";
+
+      fillExampleButton.addEventListener("click", () => {
+        fields.forEach((name, idx) => {
+          const el = document.getElementById(name);
+          el.value = (
+            idx < 3 ? (idx + 1) * 0.2 : Math.sin(idx) * 10 + 20
+          ).toFixed(3);
+        });
+      });
+
+      actions.appendChild(predictButton);
+      actions.appendChild(fillExampleButton);
+      form.appendChild(actions);
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const payload = {};
+        for (const name of fields) {
+          payload[name] = Number(document.getElementById(name).value);
+        }
+
+        result.innerHTML = '<span class="muted">Request in progress...</span>';
+
+        try {
+          const response = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || `HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+          const label = String(data.prediction_label || "Unknown");
+          const className = label.toLowerCase();
+
+          result.innerHTML = `
+          <span class="muted">Prediction class: ${data.prediction_class}</span>
+          <strong class="${className}">${label}</strong>
+        `;
+        } catch (err) {
+          result.innerHTML = `<strong class="critical">Request failed</strong><span class="muted">${err.message}</span>`;
+        }
+      });
+    </script>
+  </body>
+</html>

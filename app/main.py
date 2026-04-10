@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+from fastapi.responses import FileResponse
+from pathlib import Path
 
 app = FastAPI(title="Predictive Maintenance API")
 
@@ -51,6 +53,11 @@ label_map = {
 @app.get("/")
 def home():
     return {"message": "Predictive Maintenance API is running"}
+
+
+@app.get("/ui")
+def ui():
+    return FileResponse(Path(__file__).parent / "static" / "index.html")
 
 
 @app.post("/predict")
