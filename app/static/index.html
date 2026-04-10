@@ -280,6 +280,87 @@
         "sensor_21",
       ];
 
+      const samplePayloads = {
+        healthy: {
+          op_setting_1: -0.0007,
+          op_setting_2: -0.0004,
+          op_setting_3: 100.0,
+          sensor_1: 518.67,
+          sensor_2: 641.82,
+          sensor_3: 1589.7,
+          sensor_4: 1400.6,
+          sensor_5: 14.62,
+          sensor_6: 21.61,
+          sensor_7: 554.36,
+          sensor_8: 2388.06,
+          sensor_9: 9046.19,
+          sensor_10: 1.3,
+          sensor_11: 47.47,
+          sensor_12: 521.66,
+          sensor_13: 2388.02,
+          sensor_14: 8138.62,
+          sensor_15: 8.4195,
+          sensor_16: 0.03,
+          sensor_17: 392,
+          sensor_18: 2388,
+          sensor_19: 100.0,
+          sensor_20: 39.06,
+          sensor_21: 23.419,
+        },
+        warning: {
+          op_setting_1: 0.0032,
+          op_setting_2: -0.0001,
+          op_setting_3: 100.0,
+          sensor_1: 518.67,
+          sensor_2: 643.19,
+          sensor_3: 1596.06,
+          sensor_4: 1405.76,
+          sensor_5: 14.62,
+          sensor_6: 21.61,
+          sensor_7: 553.16,
+          sensor_8: 2388.17,
+          sensor_9: 9044.04,
+          sensor_10: 1.3,
+          sensor_11: 47.56,
+          sensor_12: 521.64,
+          sensor_13: 2388.16,
+          sensor_14: 8128.92,
+          sensor_15: 8.4227,
+          sensor_16: 0.03,
+          sensor_17: 393,
+          sensor_18: 2388,
+          sensor_19: 100.0,
+          sensor_20: 38.53,
+          sensor_21: 23.3186,
+        },
+        critical: {
+          op_setting_1: -0.0005,
+          op_setting_2: 0.0004,
+          op_setting_3: 100.0,
+          sensor_1: 518.67,
+          sensor_2: 643.15,
+          sensor_3: 1592.22,
+          sensor_4: 1423.48,
+          sensor_5: 14.62,
+          sensor_6: 21.61,
+          sensor_7: 552.68,
+          sensor_8: 2388.15,
+          sensor_9: 9044.45,
+          sensor_10: 1.3,
+          sensor_11: 47.79,
+          sensor_12: 520.44,
+          sensor_13: 2388.2,
+          sensor_14: 8123.77,
+          sensor_15: 8.5015,
+          sensor_16: 0.03,
+          sensor_17: 394,
+          sensor_18: 2388,
+          sensor_19: 100.0,
+          sensor_20: 38.78,
+          sensor_21: 23.1538,
+        },
+      };
+
       const form = document.getElementById("predict-form");
       const result = document.getElementById("result");
 
@@ -314,22 +395,42 @@
       predictButton.type = "submit";
       predictButton.textContent = "Predict status";
 
-      const fillExampleButton = document.createElement("button");
-      fillExampleButton.className = "secondary";
-      fillExampleButton.type = "button";
-      fillExampleButton.textContent = "Fill sample values";
+      function applySample(sampleKey) {
+        const payload = samplePayloads[sampleKey];
+        if (!payload) {
+          return;
+        }
 
-      fillExampleButton.addEventListener("click", () => {
-        fields.forEach((name, idx) => {
+        fields.forEach((name) => {
           const el = document.getElementById(name);
-          el.value = (
-            idx < 3 ? (idx + 1) * 0.2 : Math.sin(idx) * 10 + 20
-          ).toFixed(3);
+          if (el && payload[name] !== undefined) {
+            el.value = String(payload[name]);
+          }
         });
-      });
+      }
+
+      const sample1Button = document.createElement("button");
+      sample1Button.className = "secondary";
+      sample1Button.type = "button";
+      sample1Button.textContent = "Load healthy sample";
+      sample1Button.addEventListener("click", () => applySample("healthy"));
+
+      const sample2Button = document.createElement("button");
+      sample2Button.className = "secondary";
+      sample2Button.type = "button";
+      sample2Button.textContent = "Load warning sample";
+      sample2Button.addEventListener("click", () => applySample("warning"));
+
+      const sample3Button = document.createElement("button");
+      sample3Button.className = "secondary";
+      sample3Button.type = "button";
+      sample3Button.textContent = "Load critical sample";
+      sample3Button.addEventListener("click", () => applySample("critical"));
 
       actions.appendChild(predictButton);
-      actions.appendChild(fillExampleButton);
+      actions.appendChild(sample1Button);
+      actions.appendChild(sample2Button);
+      actions.appendChild(sample3Button);
       form.appendChild(actions);
 
       form.addEventListener("submit", async (event) => {
